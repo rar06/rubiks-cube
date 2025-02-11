@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.11.35327.3
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "rubiks cube", "rubiks cube\rubiks cube.csproj", "{26B5C21A-A1FB-454A-A2CF-5C7CC5E55851}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{26B5C21A-A1FB-454A-A2CF-5C7CC5E55851}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{26B5C21A-A1FB-454A-A2CF-5C7CC5E55851}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{26B5C21A-A1FB-454A-A2CF-5C7CC5E55851}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{26B5C21A-A1FB-454A-A2CF-5C7CC5E55851}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {31AED91A-12C2-413F-A6FD-38744CF8E5C4}
+	EndGlobalSection
+EndGlobal
