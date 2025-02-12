@@ -16,7 +16,7 @@ namespace rubiks_cube
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new test1());
+            Application.Run(new MainFrame());
         }
     }
 }
