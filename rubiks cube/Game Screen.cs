@@ -59,32 +59,32 @@ namespace rubiks_cube
 
             // Create DataGridViews with correct positioning
             dataGridView1 = new DataGridView(); // Top face
-            ConfigureSingleDataGridView(dataGridView1, Color.Red);
+            ConfigureSingleDataGridView(dataGridView1, Color.White);
             dataGridView1.Location = positions[0];
             Controls.Add(dataGridView1);
 
             dataGridView2 = new DataGridView(); // Right face
-            ConfigureSingleDataGridView(dataGridView2, Color.Blue);
+            ConfigureSingleDataGridView(dataGridView2, Color.Red);
             dataGridView2.Location = positions[1];
             Controls.Add(dataGridView2);
 
             dataGridView3 = new DataGridView(); // Bottom face
-            ConfigureSingleDataGridView(dataGridView3, Color.Green);
+            ConfigureSingleDataGridView(dataGridView3, Color.Yellow);
             dataGridView3.Location = positions[2];
             Controls.Add(dataGridView3);
 
             dataGridView4 = new DataGridView(); // Left face
-            ConfigureSingleDataGridView(dataGridView4, Color.Yellow);
+            ConfigureSingleDataGridView(dataGridView4, Color.Orange);
             dataGridView4.Location = positions[3];
             Controls.Add(dataGridView4);
 
             dataGridView5 = new DataGridView(); // Front face
-            ConfigureSingleDataGridView(dataGridView5, Color.White);
+            ConfigureSingleDataGridView(dataGridView5, Color.Green);
             dataGridView5.Location = positions[4];
             Controls.Add(dataGridView5);
 
             dataGridView6 = new DataGridView(); // Back face
-            ConfigureSingleDataGridView(dataGridView6, Color.Navy);
+            ConfigureSingleDataGridView(dataGridView6, Color.Blue);
             dataGridView6.Location = positions[5];
             Controls.Add(dataGridView6);
         }
@@ -293,7 +293,6 @@ namespace rubiks_cube
             {
                 string move = clickedButton.Text;
                 PerformMove(move);
-                UpdateCubeUI();
             }
         }
 
@@ -341,115 +340,440 @@ namespace rubiks_cube
             }
         }
 
+
         private void RotateFrontClockwise()
         {
-            // Rotate the front face clockwise
-            RotateFaceClockwise(4); // Front face is index 4
-                                    // Adjust adjacent faces (top, right, bottom, left)
-            char[] temp = { cube.Faces[0][2, 0], cube.Faces[0][2, 1], cube.Faces[0][2, 2] };
-            cube.Faces[0][2, 0] = cube.Faces[3][2, 2];
-            cube.Faces[0][2, 1] = cube.Faces[3][1, 2];
-            cube.Faces[0][2, 2] = cube.Faces[3][0, 2];
-            cube.Faces[3][0, 2] = cube.Faces[2][0, 0];
-            cube.Faces[3][1, 2] = cube.Faces[2][0, 1];
-            cube.Faces[3][2, 2] = cube.Faces[2][0, 2];
-            cube.Faces[2][0, 0] = cube.Faces[1][2, 0];
-            cube.Faces[2][0, 1] = cube.Faces[1][1, 0];
-            cube.Faces[2][0, 2] = cube.Faces[1][0, 0];
-            cube.Faces[1][0, 0] = temp[0];
-            cube.Faces[1][1, 0] = temp[1];
-            cube.Faces[1][2, 0] = temp[2];
+            SwapFrontAdjacentValuesClosckWise();
+        }
+
+        private void SwapFrontAdjacentValuesClosckWise()
+        {
+            Color[] temp = new Color[3];
+
+            for (int i = 0; i < 3; i++)
+            {
+                temp[i] = dataGridView1.Rows[2].Cells[i].Style.BackColor;
+            }
+
+            for (int i = 0; i < 3; i++)
+            {
+                dataGridView1.Rows[2].Cells[i].Style.BackColor = dataGridView4.Rows[i].Cells[2].Style.BackColor; // Correct indexing
+            }
+
+            for (int i = 0; i < 3; i++)
+            {
+                dataGridView4.Rows[i].Cells[2].Style.BackColor = dataGridView3.Rows[0].Cells[i].Style.BackColor; // Correct indexing
+            }
+
+            for (int i = 0; i < 3; i++)
+            {
+                dataGridView3.Rows[0].Cells[i].Style.BackColor = dataGridView2.Rows[i].Cells[0].Style.BackColor; // Correct indexing
+                if(i==0) dataGridView3.DefaultCellStyle.SelectionBackColor = dataGridView2.Rows[i].Cells[0].Style.BackColor;
+            }
+
+            for (int i = 0; i < 3; i++)
+            {
+                dataGridView2.Rows[i].Cells[0].Style.BackColor = temp[i]; // Correct indexing
+                if(i == 0) dataGridView2.DefaultCellStyle.SelectionBackColor = temp[i];
+            }
+        }
+
+        private void RotateBackClockwise()
+        {
+            SwapBackAdjacentValuesClockwise();
+        }
+
+        private void SwapBackAdjacentValuesClockwise()
+        {
+            Color[] temp = new Color[3];
+
+            for (int i = 0; i < 3; i++)
+            {
+                temp[i] = dataGridView1.Rows[0].Cells[i].Style.BackColor;
+            }
+
+            for (int i = 0; i < 3; i++)
+            {
+                dataGridView1.Rows[0].Cells[i].Style.BackColor = dataGridView2.Rows[i].Cells[2].Style.BackColor; // Correct indexing
+                if (i == 0) dataGridView1.DefaultCellStyle.SelectionBackColor = dataGridView2.Rows[i].Cells[2].Style.BackColor;
+            }
+
+            for (int i = 0; i < 3; i++)
+            {
+                dataGridView2.Rows[i].Cells[2].Style.BackColor = dataGridView3.Rows[2].Cells[i].Style.BackColor; // Correct indexing
+            }
+
+            for (int i = 0; i < 3; i++)
+            {
+                dataGridView3.Rows[2].Cells[i].Style.BackColor = dataGridView4.Rows[i].Cells[0].Style.BackColor; // Correct indexing
+            }
+
+            for (int i = 0; i < 3; i++)
+            {
+                dataGridView4.Rows[i].Cells[0].Style.BackColor = temp[i]; // Correct indexing
+                if (i == 0) dataGridView4.DefaultCellStyle.SelectionBackColor = temp[i];
+            }
+        }
+
+        private void RotateRightClockwise()
+        {
+            SwapRightAdjacentValuesClockWise();
+        }
+
+        private void SwapRightAdjacentValuesClockWise()
+        {
+            Color[] temp = new Color[3];
+
+            for (int i = 0; i < 3; i++)
+            {
+                temp[i] = dataGridView1.Rows[i].Cells[2].Style.BackColor;
+            }
+
+            for (int i = 0; i < 3; i++)
+            {
+                dataGridView1.Rows[i].Cells[2].Style.BackColor = dataGridView5.Rows[i].Cells[2].Style.BackColor; // Correct indexing
+            }
+
+            for (int i = 0; i < 3; i++)
+            {
+                dataGridView5.Rows[i].Cells[2].Style.BackColor = dataGridView3.Rows[i].Cells[2].Style.BackColor; // Correct indexing
+            }
+
+            for (int i = 0; i < 3; i++)
+            {
+                dataGridView3.Rows[i].Cells[2].Style.BackColor = dataGridView6.Rows[i].Cells[2].Style.BackColor; // Correct indexing
+            }
+
+            for (int i = 0; i < 3; i++)
+            {
+                dataGridView6.Rows[i].Cells[2].Style.BackColor = temp[i]; // Correct indexing
+            }
+        }
+
+        private void RotateLeftClockwise()
+        {
+            SwapLeftAdjacentValuesClockwise();
+        }
+
+        private void SwapLeftAdjacentValuesClockwise()
+        {
+            Color[] temp = new Color[3];
+
+            for (int i = 0; i < 3; i++)
+            {
+                temp[i] = dataGridView1.Rows[i].Cells[0].Style.BackColor;
+            }
+
+            for (int i = 0; i < 3; i++)
+            {
+                dataGridView1.Rows[i].Cells[0].Style.BackColor = dataGridView6.Rows[i].Cells[0].Style.BackColor; // Correct indexing
+                if (i == 0) dataGridView1.DefaultCellStyle.SelectionBackColor = dataGridView6.Rows[i].Cells[0].Style.BackColor;
+            }
+
+            for (int i = 0; i < 3; i++)
+            {
+                dataGridView6.Rows[i].Cells[0].Style.BackColor = dataGridView3.Rows[i].Cells[0].Style.BackColor; // Correct indexing
+                if (i == 0) dataGridView6.DefaultCellStyle.SelectionBackColor = dataGridView3.Rows[i].Cells[0].Style.BackColor;
+            }
+
+            for (int i = 0; i < 3; i++)
+            {
+                dataGridView3.Rows[i].Cells[0].Style.BackColor = dataGridView5.Rows[i].Cells[0].Style.BackColor; // Correct indexing
+                if (i == 0) dataGridView3.DefaultCellStyle.SelectionBackColor = dataGridView5.Rows[i].Cells[0].Style.BackColor;
+            }
+
+            for (int i = 0; i < 3; i++)
+            {
+                dataGridView5.Rows[i].Cells[0].Style.BackColor = temp[i]; // Correct indexing
+                if (i == 0) dataGridView5.DefaultCellStyle.SelectionBackColor = temp[i];
+            }
+        }
+
+        private void RotateUpClockwise()
+        {
+            SwapUpAdjacentValuesClockWise();
+        }
+
+        private void SwapUpAdjacentValuesClockWise()
+        {
+            Color[] temp = new Color[3];
+
+            for (int i = 0; i < 3; i++)
+            {
+                temp[i] = dataGridView5.Rows[0].Cells[i].Style.BackColor;
+            }
+
+            for (int i = 0; i < 3; i++)
+            {
+                dataGridView5.Rows[0].Cells[i].Style.BackColor = dataGridView2.Rows[0].Cells[i].Style.BackColor; // Correct indexing
+                if (i == 0) dataGridView5.DefaultCellStyle.SelectionBackColor = dataGridView2.Rows[0].Cells[i].Style.BackColor;
+            }
+
+            for (int i = 0; i < 3; i++)
+            {
+                dataGridView2.Rows[0].Cells[i].Style.BackColor = dataGridView6.Rows[0].Cells[i].Style.BackColor; // Correct indexing
+                if (i == 0) dataGridView2.DefaultCellStyle.SelectionBackColor = dataGridView6.Rows[0].Cells[i].Style.BackColor;
+            }
+
+            for (int i = 0; i < 3; i++)
+            {
+                dataGridView6.Rows[0].Cells[i].Style.BackColor = dataGridView4.Rows[0].Cells[i].Style.BackColor; // Correct indexing
+                if (i == 0) dataGridView6.DefaultCellStyle.SelectionBackColor = dataGridView4.Rows[0].Cells[i].Style.BackColor;
+            }
+
+            for (int i = 0; i < 3; i++)
+            {
+                dataGridView4.Rows[0].Cells[i].Style.BackColor = temp[i]; // Correct indexing
+                if (i == 0) dataGridView4.DefaultCellStyle.SelectionBackColor = temp[i];
+            }
+        }
+
+        private void RotateDownClockwise()
+        {
+            SwapDownAdjacentValuesClockwise();
+        }
+
+        private void SwapDownAdjacentValuesClockwise()
+        {
+            Color[] temp = new Color[3];
+
+            for (int i = 0; i < 3; i++)
+            {
+                temp[i] = dataGridView5.Rows[2].Cells[i].Style.BackColor;
+            }
+
+            for (int i = 0; i < 3; i++)
+            {
+                dataGridView5.Rows[2].Cells[i].Style.BackColor = dataGridView4.Rows[2].Cells[i].Style.BackColor; // Correct indexing
+            }
+
+            for (int i = 0; i < 3; i++)
+            {
+                dataGridView4.Rows[2].Cells[i].Style.BackColor = dataGridView6.Rows[2].Cells[i].Style.BackColor; // Correct indexing
+            }
+
+            for (int i = 0; i < 3; i++)
+            {
+                dataGridView6.Rows[2].Cells[i].Style.BackColor = dataGridView2.Rows[2].Cells[i].Style.BackColor; // Correct indexing
+            }
+
+            for (int i = 0; i < 3; i++)
+            {
+                dataGridView2.Rows[2].Cells[i].Style.BackColor = temp[i]; // Correct indexing
+            }
         }
 
         private void RotateFrontCounterClockwise()
         {
-            // Rotate the front face counter-clockwise
-            RotateFaceCounterClockwise(4); // Front face is index 4
-                                           // Adjust adjacent faces (top, right, bottom, left)
-            char[] temp = { cube.Faces[0][2, 0], cube.Faces[0][2, 1], cube.Faces[0][2, 2] };
-            cube.Faces[0][2, 0] = cube.Faces[1][0, 0];
-            cube.Faces[0][2, 1] = cube.Faces[1][1, 0];
-            cube.Faces[0][2, 2] = cube.Faces[1][2, 0];
-            cube.Faces[1][0, 0] = cube.Faces[2][0, 2];
-            cube.Faces[1][1, 0] = cube.Faces[2][0, 1];
-            cube.Faces[1][2, 0] = cube.Faces[2][0, 0];
-            cube.Faces[2][0, 0] = cube.Faces[3][2, 2];
-            cube.Faces[2][0, 1] = cube.Faces[3][1, 2];
-            cube.Faces[2][0, 2] = cube.Faces[3][0, 2];
-            cube.Faces[3][0, 2] = temp[2];
-            cube.Faces[3][1, 2] = temp[1];
-            cube.Faces[3][2, 2] = temp[0];
+            SwapFrontAdjacentValuesCounterClockwise();
         }
 
-        // Implement similar methods for other moves (R, U, B, L, D, R', U', B', L', D')
-
-        private void RotateFaceClockwise(int faceIndex)
+        private void SwapFrontAdjacentValuesCounterClockwise()
         {
-            char[,] face = cube.Faces[faceIndex];
-            char[,] newFace = new char[3, 3];
+            Color[] temp = new Color[3];
 
             for (int i = 0; i < 3; i++)
             {
-                for (int j = 0; j < 3; j++)
-                {
-                    newFace[i, j] = face[2 - j, i];
-                }
+                temp[i] = dataGridView1.Rows[2].Cells[i].Style.BackColor;
             }
-
-            cube.Faces[faceIndex] = newFace;
-        }
-
-        private void RotateFaceCounterClockwise(int faceIndex)
-        {
-            char[,] face = cube.Faces[faceIndex];
-            char[,] newFace = new char[3, 3];
 
             for (int i = 0; i < 3; i++)
             {
-                for (int j = 0; j < 3; j++)
-                {
-                    newFace[i, j] = face[j, 2 - i];
-                }
+                dataGridView1.Rows[2].Cells[i].Style.BackColor = dataGridView2.Rows[i].Cells[0].Style.BackColor;
             }
 
-            cube.Faces[faceIndex] = newFace;
-        }
-
-        private void UpdateCubeUI()
-        {
-            // Update the UI to reflect the cube's state
-            UpdateDataGridView(dataGridView1, cube.Faces[0]); // Top face
-            UpdateDataGridView(dataGridView2, cube.Faces[1]); // Right face
-            UpdateDataGridView(dataGridView3, cube.Faces[2]); // Bottom face
-            UpdateDataGridView(dataGridView4, cube.Faces[3]); // Left face
-            UpdateDataGridView(dataGridView5, cube.Faces[4]); // Front face
-            UpdateDataGridView(dataGridView6, cube.Faces[5]); // Back face
-        }
-
-        private void UpdateDataGridView(DataGridView dgv, char[,] face)
-        {
-            for (int row = 0; row < 3; row++)
+            for (int i = 0; i < 3; i++)
             {
-                for (int col = 0; col < 3; col++)
-                {
-                    dgv.Rows[row].Cells[col].Style.BackColor = GetColorFromChar(face[row, col]);
-                }
+                dataGridView2.Rows[i].Cells[0].Style.BackColor = dataGridView3.Rows[0].Cells[i].Style.BackColor;
+                if (i == 0) dataGridView2.DefaultCellStyle.SelectionBackColor = dataGridView3.Rows[0].Cells[i].Style.BackColor;
+            }
+
+            for (int i = 0; i < 3; i++)
+            {
+                dataGridView3.Rows[0].Cells[i].Style.BackColor = dataGridView4.Rows[i].Cells[2].Style.BackColor;
+                if (i == 0) dataGridView3.DefaultCellStyle.SelectionBackColor = dataGridView4.Rows[i].Cells[2].Style.BackColor;
+            }
+
+            for (int i = 0; i < 3; i++)
+            {
+                dataGridView4.Rows[i].Cells[2].Style.BackColor = temp[i];
             }
         }
 
-        private Color GetColorFromChar(char colorChar)
+        private void RotateBackCounterClockwise()
         {
-            switch (colorChar)
+            SwapBackAdjacentValuesCounterClockwise();
+        }
+
+        private void SwapBackAdjacentValuesCounterClockwise()
+        {
+            Color[] temp = new Color[3];
+
+            for (int i = 0; i < 3; i++)
             {
-                case 'R': return Color.Red;
-                case 'B': return Color.Blue;
-                case 'G': return Color.Green;
-                case 'Y': return Color.Yellow;
-                case 'O': return Color.Orange;
-                case 'N': return Color.Navy;
-                case 'W': return Color.White;
-                default: throw new ArgumentException("Invalid color character");
+                temp[i] = dataGridView4.Rows[i].Cells[0].Style.BackColor;
+            }
+
+            for (int i = 0; i < 3; i++)
+            {
+                dataGridView4.Rows[i].Cells[0].Style.BackColor = dataGridView3.Rows[2].Cells[i].Style.BackColor;
+                if (i == 0) dataGridView4.DefaultCellStyle.SelectionBackColor = dataGridView3.Rows[2].Cells[i].Style.BackColor;
+            }
+
+            for (int i = 0; i < 3; i++)
+            {
+                dataGridView3.Rows[2].Cells[i].Style.BackColor = dataGridView2.Rows[i].Cells[2].Style.BackColor;
+            }
+
+            for (int i = 0; i < 3; i++)
+            {
+                dataGridView2.Rows[i].Cells[2].Style.BackColor = dataGridView1.Rows[0].Cells[i].Style.BackColor;
+            }
+
+            for (int i = 0; i < 3; i++)
+            {
+                dataGridView1.Rows[0].Cells[i].Style.BackColor = temp[i];
+                if (i == 0) dataGridView1.DefaultCellStyle.SelectionBackColor = temp[i];
             }
         }
+
+        private void RotateRightCounterClockwise()
+        {
+            SwapRightAdjacentValuesCounterClockwise();
+        }
+
+        private void SwapRightAdjacentValuesCounterClockwise()
+        {
+            Color[] temp = new Color[3];
+
+            for (int i = 0; i < 3; i++)
+            {
+                temp[i] = dataGridView1.Rows[i].Cells[2].Style.BackColor;
+            }
+
+            for (int i = 0; i < 3; i++)
+            {
+                dataGridView1.Rows[i].Cells[2].Style.BackColor = dataGridView6.Rows[i].Cells[2].Style.BackColor;
+            }
+
+            for (int i = 0; i < 3; i++)
+            {
+                dataGridView6.Rows[i].Cells[2].Style.BackColor = dataGridView3.Rows[i].Cells[2].Style.BackColor;
+            }
+
+            for (int i = 0; i < 3; i++)
+            {
+                dataGridView3.Rows[i].Cells[2].Style.BackColor = dataGridView5.Rows[i].Cells[2].Style.BackColor;
+            }
+
+            for (int i = 0; i < 3; i++)
+            {
+                dataGridView5.Rows[i].Cells[2].Style.BackColor = temp[i];
+            }
+        }
+
+        private void RotateLeftCounterClockwise()
+        {
+            SwapLeftAdjacentValuesCounterClockwise();
+        }
+
+        private void SwapLeftAdjacentValuesCounterClockwise()
+        {
+            Color[] temp = new Color[3];
+            for (int i = 0; i < 3; i++)
+            {
+                temp[i] = dataGridView1.Rows[i].Cells[0].Style.BackColor;
+            }
+            for (int i = 0; i < 3; i++)
+            {
+                dataGridView1.Rows[i].Cells[0].Style.BackColor = dataGridView5.Rows[i].Cells[0].Style.BackColor;
+                if (i == 0) dataGridView1.DefaultCellStyle.SelectionBackColor = dataGridView5.Rows[i].Cells[0].Style.BackColor;
+            }
+            for (int i = 0; i < 3; i++)
+            {
+                dataGridView5.Rows[i].Cells[0].Style.BackColor = dataGridView3.Rows[i].Cells[0].Style.BackColor;
+                if (i == 0) dataGridView5.DefaultCellStyle.SelectionBackColor = dataGridView3.Rows[i].Cells[0].Style.BackColor;
+            }
+            for (int i = 0; i < 3; i++)
+            {
+                dataGridView3.Rows[i].Cells[0].Style.BackColor = dataGridView6.Rows[i].Cells[0].Style.BackColor;
+                if (i == 0) dataGridView3.DefaultCellStyle.SelectionBackColor = dataGridView6.Rows[i].Cells[0].Style.BackColor;
+            }
+            for (int i = 0; i < 3; i++)
+            {
+                dataGridView6.Rows[i].Cells[0].Style.BackColor = temp[i];
+                if (i == 0) dataGridView6.DefaultCellStyle.SelectionBackColor = temp[i];
+            }
+        }
+
+        private void RotateUpCounterClockwise()
+        {
+            SwapUpAdjacentValuesCounterClockwise();
+        }
+
+        private void SwapUpAdjacentValuesCounterClockwise()
+        {
+            Color[] temp = new Color[3];
+
+            for (int i = 0; i < 3; i++)
+            {
+                temp[i] = dataGridView5.Rows[0].Cells[i].Style.BackColor;
+            }
+
+            for (int i = 0; i < 3; i++)
+            {
+                dataGridView5.Rows[0].Cells[i].Style.BackColor = dataGridView4.Rows[0].Cells[i].Style.BackColor;
+                if (i == 0) dataGridView5.DefaultCellStyle.SelectionBackColor = dataGridView4.Rows[0].Cells[i].Style.BackColor;
+            }
+
+            for (int i = 0; i < 3; i++)
+            {
+                dataGridView4.Rows[0].Cells[i].Style.BackColor = dataGridView6.Rows[0].Cells[i].Style.BackColor;
+                if (i == 0) dataGridView4.DefaultCellStyle.SelectionBackColor = dataGridView6.Rows[0].Cells[i].Style.BackColor;
+            }
+
+            for (int i = 0; i < 3; i++)
+            {
+                dataGridView6.Rows[0].Cells[i].Style.BackColor = dataGridView2.Rows[0].Cells[i].Style.BackColor;
+                if (i == 0) dataGridView6.DefaultCellStyle.SelectionBackColor = dataGridView2.Rows[0].Cells[i].Style.BackColor;
+            }
+
+            for (int i = 0; i < 3; i++)
+            {
+                dataGridView2.Rows[0].Cells[i].Style.BackColor = temp[i];
+                if (i == 0) dataGridView2.DefaultCellStyle.SelectionBackColor = temp[i];
+            }
+        }
+
+        private void RotateDownCounterClockwise()
+        {
+            SwapDownAdjacentValuesCounterClockwise();
+        }
+
+        private void SwapDownAdjacentValuesCounterClockwise()
+        {
+            Color[] temp = new Color[3];
+            for (int i = 0; i < 3; i++)
+            {
+                temp[i] = dataGridView5.Rows[2].Cells[i].Style.BackColor;
+            }
+            for (int i = 0; i < 3; i++)
+            {
+                dataGridView5.Rows[2].Cells[i].Style.BackColor = dataGridView2.Rows[2].Cells[i].Style.BackColor;
+            }
+            for (int i = 0; i < 3; i++)
+            {
+                dataGridView2.Rows[2].Cells[i].Style.BackColor = dataGridView6.Rows[2].Cells[i].Style.BackColor;
+            }
+            for (int i = 0; i < 3; i++)
+            {
+                dataGridView6.Rows[2].Cells[i].Style.BackColor = dataGridView4.Rows[2].Cells[i].Style.BackColor;
+            }
+            for (int i = 0; i < 3; i++)
+            {
+                dataGridView4.Rows[2].Cells[i].Style.BackColor = temp[i];
+            }
+        }
+
     }
 }
