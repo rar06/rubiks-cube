@@ -18,9 +18,11 @@ namespace rubiks_cube
         private DataGridView dataGridView4;
         private DataGridView dataGridView5;
         private DataGridView dataGridView6;
-        private Button lockColorButton;
+        private Button scrambleButton;
+        private Button resetColorButton;
         private Panel colorPanel;
         private Color selectedColor = Color.White;
+        private Random random = new Random();
 
         public Game_Screen()
         {
@@ -33,8 +35,9 @@ namespace rubiks_cube
             this.StartPosition = FormStartPosition.CenterScreen;
             ConfigureDataGridView();
             ConfigureColorPanel();
-            ConfigureLockColorButton();
+            ConfigureResetColorButton();
             ConfigureMoveButtons();
+            ConfigureScrambleButton();
         }
 
         private void ConfigureDataGridView()
@@ -161,7 +164,7 @@ namespace rubiks_cube
             Controls.Add(colorPanel);
 
             // Define colors for Rubik's Cube
-            Color[] rubiksColors = { Color.Red, Color.Blue, Color.Green, Color.Yellow, Color.White, Color.Navy };
+            Color[] rubiksColors = { Color.White, Color.Red, Color.Yellow, Color.Orange, Color.Green, Color.Blue };
 
             for (int i = 0; i < rubiksColors.Length; i++)
             {
@@ -193,83 +196,45 @@ namespace rubiks_cube
             }
         }
 
-        private void ConfigureLockColorButton()
+        private void ConfigureResetColorButton()
         {
-            lockColorButton = new Button();
-            lockColorButton.Text = "Lock Colors";
-            lockColorButton.Size = new Size(100, 40);
+            resetColorButton = new Button();
+            resetColorButton.Text = "Reset Colors";
+            resetColorButton.Size = new Size(100, 40);
 
             // Positioning the button at the bottom center
-            int buttonX = (this.ClientSize.Width - lockColorButton.Width) / 2;
-            int buttonY = this.ClientSize.Height - lockColorButton.Height - 60;
-            lockColorButton.Location = new Point(buttonX, buttonY);
+            int buttonWidth = resetColorButton.Width;
+            int buttonHeight = resetColorButton.Height;
+            int spacing = 20; // Space between buttons
 
-            lockColorButton.Click += lockColorButton_Click;
-            Controls.Add(lockColorButton);
+            int totalWidth = (buttonWidth * 2) + spacing;
+            int startX = (this.ClientSize.Width - totalWidth) / 2;
+            int buttonY = this.ClientSize.Height - buttonHeight - 60;
+
+            resetColorButton.Location = new Point(startX + buttonWidth + spacing, buttonY);
+            resetColorButton.Click += resetColorButton_Click;
+            Controls.Add(resetColorButton);
         }
 
-        private void lockColorButton_Click(object sender, EventArgs e)
+        private void resetColorButton_Click(object sender, EventArgs e)
         {
-            // Toggle the color selection state
-            if (lockColorButton.Text == "Lock Colors")
-            {
-                // Disable color selection
-                DisableColorSelection();
-                lockColorButton.Text = "Unlock Colors";
-            }
-            else
-            {
-                // Enable color selection
-                EnableColorSelection();
-                lockColorButton.Text = "Lock Colors";
-            }
-        }
+            ConfigureSingleDataGridView(dataGridView1, Color.White);
 
-        private void DisableColorSelection()
-        {
-            // Disable all color buttons in the color panel
-            foreach (Control control in colorPanel.Controls)
-            {
-                if (control is Button)
-                {
-                    control.Enabled = false; // Disable the button
-                }
-            }
+            ConfigureSingleDataGridView(dataGridView2, Color.Red);
 
-            // Disable cell click event for all DataGridViews
-            dataGridView1.CellClick -= DataGridView_CellClick;
-            dataGridView2.CellClick -= DataGridView_CellClick;
-            dataGridView3.CellClick -= DataGridView_CellClick;
-            dataGridView4.CellClick -= DataGridView_CellClick;
-            dataGridView5.CellClick -= DataGridView_CellClick;
-            dataGridView6.CellClick -= DataGridView_CellClick;
-        }
+            ConfigureSingleDataGridView(dataGridView3, Color.Yellow);
 
-        private void EnableColorSelection()
-        {
-            // Enable all color buttons in the color panel
-            foreach (Control control in colorPanel.Controls)
-            {
-                if (control is Button)
-                {
-                    control.Enabled = true; // Enable the button
-                }
-            }
+            ConfigureSingleDataGridView(dataGridView4, Color.Orange);
 
-            // Re-enable cell click event for all DataGridViews
-            dataGridView1.CellClick += DataGridView_CellClick;
-            dataGridView2.CellClick += DataGridView_CellClick;
-            dataGridView3.CellClick += DataGridView_CellClick;
-            dataGridView4.CellClick += DataGridView_CellClick;
-            dataGridView5.CellClick += DataGridView_CellClick;
-            dataGridView6.CellClick += DataGridView_CellClick;
+            ConfigureSingleDataGridView(dataGridView5, Color.Green);
+
+            ConfigureSingleDataGridView(dataGridView6, Color.Blue);
         }
 
         private void ConfigureMoveButtons()
         {
-            // Define the moves and their positions
             string[] moves = { "F", "R", "U", "B", "L", "D", "F'", "R'", "U'", "B'", "L'", "D'" };
-            int startX = this.ClientSize.Width - 120; // Right side of the form
+            int startX = 150; // Left-aligned
             int startY = 20; // Top of the form
             int buttonWidth = 50;
             int buttonHeight = 30;
@@ -280,9 +245,66 @@ namespace rubiks_cube
                 Button moveButton = new Button();
                 moveButton.Text = moves[i];
                 moveButton.Size = new Size(buttonWidth, buttonHeight);
-                moveButton.Location = new Point(startX, startY + i * (buttonHeight + gap));
+
+                // Arrange buttons in a row
+                moveButton.Location = new Point(startX + i * (buttonWidth + gap), startY);
+
                 moveButton.Click += MoveButton_Click;
                 Controls.Add(moveButton);
+            }
+        }
+
+
+        private void ConfigureScrambleButton()
+        {
+            scrambleButton = new Button();
+            scrambleButton.Text = "Scramble";
+            scrambleButton.Size = new Size(100, 40);
+
+            // Positioning the scramble button to the left of resetColorButton
+            int buttonWidth = scrambleButton.Width;
+            int buttonHeight = scrambleButton.Height;
+            int spacing = 20; // Space between buttons
+
+            int totalWidth = (buttonWidth * 2) + spacing;
+            int startX = (this.ClientSize.Width - totalWidth) / 2;
+            int buttonY = this.ClientSize.Height - buttonHeight - 60;
+
+            scrambleButton.Location = new Point(startX, buttonY);
+            scrambleButton.Click += scrambleButton_Click;
+            Controls.Add(scrambleButton);
+        }
+
+
+        private void scrambleButton_Click(object sender, EventArgs e)
+        {
+            string[] validMoves = { "F", "R", "U", "B", "L", "D", "F'", "R'", "U'", "B'", "L'", "D'" };
+            int scrambleLength = random.Next()%99 + 1; // Number of moves in the scramble
+
+            for (int i = 0; i < scrambleLength; i++)
+            {
+                string move = validMoves[random.Next(validMoves.Length)];
+                ApplyMove(move);
+            }
+        }
+
+        private void ApplyMove(string move)
+        {
+            // Apply the move to the DataGridViews (simulating a valid rotation)
+            switch (move)
+            {
+                case "F": RotateFrontClockwise(); break;
+                case "R": RotateRightClockwise(); break;
+                case "U": RotateUpClockwise(); break;
+                case "B": RotateBackClockwise(); break;
+                case "L": RotateLeftClockwise(); break;
+                case "D": RotateDownClockwise(); break;
+                case "F'": RotateFrontCounterClockwise(); break;
+                case "R'": RotateRightCounterClockwise(); break;
+                case "U'": RotateUpCounterClockwise(); break;
+                case "B'": RotateBackCounterClockwise(); break;
+                case "L'": RotateLeftCounterClockwise(); break;
+                case "D'": RotateDownCounterClockwise(); break;
             }
         }
 
@@ -441,12 +463,13 @@ namespace rubiks_cube
 
             for (int i = 0; i < 3; i++)
             {
-                dataGridView3.Rows[i].Cells[2].Style.BackColor = dataGridView6.Rows[i].Cells[2].Style.BackColor; // Correct indexing
+                dataGridView3.Rows[i].Cells[2].Style.BackColor = dataGridView6.Rows[i].Cells[0].Style.BackColor; // Correct indexing
             }
 
             for (int i = 0; i < 3; i++)
             {
-                dataGridView6.Rows[i].Cells[2].Style.BackColor = temp[i]; // Correct indexing
+                dataGridView6.Rows[i].Cells[0].Style.BackColor = temp[i]; // Correct indexing
+                if (i == 0) dataGridView6.DefaultCellStyle.SelectionBackColor = temp[i];
             }
         }
 
@@ -466,14 +489,13 @@ namespace rubiks_cube
 
             for (int i = 0; i < 3; i++)
             {
-                dataGridView1.Rows[i].Cells[0].Style.BackColor = dataGridView6.Rows[i].Cells[0].Style.BackColor; // Correct indexing
-                if (i == 0) dataGridView1.DefaultCellStyle.SelectionBackColor = dataGridView6.Rows[i].Cells[0].Style.BackColor;
+                dataGridView1.Rows[i].Cells[0].Style.BackColor = dataGridView6.Rows[i].Cells[2].Style.BackColor; // Correct indexing
+                if (i == 0) dataGridView1.DefaultCellStyle.SelectionBackColor = dataGridView6.Rows[i].Cells[2].Style.BackColor;
             }
 
             for (int i = 0; i < 3; i++)
             {
-                dataGridView6.Rows[i].Cells[0].Style.BackColor = dataGridView3.Rows[i].Cells[0].Style.BackColor; // Correct indexing
-                if (i == 0) dataGridView6.DefaultCellStyle.SelectionBackColor = dataGridView3.Rows[i].Cells[0].Style.BackColor;
+                dataGridView6.Rows[i].Cells[2].Style.BackColor = dataGridView3.Rows[i].Cells[0].Style.BackColor; // Correct indexing
             }
 
             for (int i = 0; i < 3; i++)
@@ -648,17 +670,13 @@ namespace rubiks_cube
 
             for (int i = 0; i < 3; i++)
             {
-                temp[i] = dataGridView1.Rows[i].Cells[2].Style.BackColor;
+                temp[i] = dataGridView6.Rows[i].Cells[0].Style.BackColor;
             }
 
             for (int i = 0; i < 3; i++)
             {
-                dataGridView1.Rows[i].Cells[2].Style.BackColor = dataGridView6.Rows[i].Cells[2].Style.BackColor;
-            }
-
-            for (int i = 0; i < 3; i++)
-            {
-                dataGridView6.Rows[i].Cells[2].Style.BackColor = dataGridView3.Rows[i].Cells[2].Style.BackColor;
+                dataGridView6.Rows[i].Cells[0].Style.BackColor = dataGridView3.Rows[i].Cells[2].Style.BackColor;
+                if(i == 0) dataGridView6.DefaultCellStyle.SelectionBackColor = dataGridView3.Rows[i].Cells[2].Style.BackColor;
             }
 
             for (int i = 0; i < 3; i++)
@@ -668,7 +686,12 @@ namespace rubiks_cube
 
             for (int i = 0; i < 3; i++)
             {
-                dataGridView5.Rows[i].Cells[2].Style.BackColor = temp[i];
+                dataGridView5.Rows[i].Cells[2].Style.BackColor = dataGridView1.Rows[i].Cells[2].Style.BackColor;
+            }
+
+            for (int i = 0; i < 3; i++)
+            {
+                dataGridView1.Rows[i].Cells[2].Style.BackColor = temp[i];
             }
         }
 
@@ -680,29 +703,33 @@ namespace rubiks_cube
         private void SwapLeftAdjacentValuesCounterClockwise()
         {
             Color[] temp = new Color[3];
+
             for (int i = 0; i < 3; i++)
             {
-                temp[i] = dataGridView1.Rows[i].Cells[0].Style.BackColor;
+                temp[i] = dataGridView5.Rows[i].Cells[0].Style.BackColor;
             }
-            for (int i = 0; i < 3; i++)
-            {
-                dataGridView1.Rows[i].Cells[0].Style.BackColor = dataGridView5.Rows[i].Cells[0].Style.BackColor;
-                if (i == 0) dataGridView1.DefaultCellStyle.SelectionBackColor = dataGridView5.Rows[i].Cells[0].Style.BackColor;
-            }
+
             for (int i = 0; i < 3; i++)
             {
                 dataGridView5.Rows[i].Cells[0].Style.BackColor = dataGridView3.Rows[i].Cells[0].Style.BackColor;
                 if (i == 0) dataGridView5.DefaultCellStyle.SelectionBackColor = dataGridView3.Rows[i].Cells[0].Style.BackColor;
             }
+
             for (int i = 0; i < 3; i++)
             {
-                dataGridView3.Rows[i].Cells[0].Style.BackColor = dataGridView6.Rows[i].Cells[0].Style.BackColor;
-                if (i == 0) dataGridView3.DefaultCellStyle.SelectionBackColor = dataGridView6.Rows[i].Cells[0].Style.BackColor;
+                dataGridView3.Rows[i].Cells[0].Style.BackColor = dataGridView6.Rows[i].Cells[2].Style.BackColor;
+                if (i == 0) dataGridView3.DefaultCellStyle.SelectionBackColor = dataGridView6.Rows[i].Cells[2].Style.BackColor;
             }
+
             for (int i = 0; i < 3; i++)
             {
-                dataGridView6.Rows[i].Cells[0].Style.BackColor = temp[i];
-                if (i == 0) dataGridView6.DefaultCellStyle.SelectionBackColor = temp[i];
+                dataGridView6.Rows[i].Cells[2].Style.BackColor = dataGridView1.Rows[i].Cells[0].Style.BackColor;
+            }
+
+            for (int i = 0; i < 3; i++)
+            {
+                dataGridView1.Rows[i].Cells[0].Style.BackColor = temp[i];
+                if (i == 0) dataGridView1.DefaultCellStyle.SelectionBackColor = temp[i];
             }
         }
 
