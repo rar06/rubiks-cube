@@ -112,7 +112,6 @@ namespace rubiks_cube
             dgv.ReadOnly = true;
             dgv.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
             dgv.DefaultCellStyle.Font = new Font("Arial", 12, FontStyle.Bold);
-            dgv.DefaultCellStyle.SelectionBackColor = color;
 
             dgv.AutoSize = false;
             dgv.ScrollBars = ScrollBars.None;
@@ -135,17 +134,14 @@ namespace rubiks_cube
         private void SetRubiksCubeColors(DataGridView dgv, Color color)
         {
             // Example: Set colors differently for each cube
-            dgv.Rows[0].Cells[0].Style.BackColor = color;
-            dgv.Rows[0].Cells[1].Style.BackColor = color;
-            dgv.Rows[0].Cells[2].Style.BackColor = color;
-
-            dgv.Rows[1].Cells[0].Style.BackColor = color;
-            dgv.Rows[1].Cells[1].Style.BackColor = color;
-            dgv.Rows[1].Cells[2].Style.BackColor = color;
-
-            dgv.Rows[2].Cells[0].Style.BackColor = color;
-            dgv.Rows[2].Cells[1].Style.BackColor = color;
-            dgv.Rows[2].Cells[2].Style.BackColor = color;
+            for(int i = 0; i < 3; i++)
+            {
+                for (int j = 0; j < 3; j++)
+                {
+                    dgv.Rows[i].Cells[j].Style.BackColor = color;
+                    dgv.Rows[i].Cells[j].Style.SelectionBackColor = color;
+                }
+            }
         }
 
         private void ConfigureColorPanel()
@@ -279,7 +275,7 @@ namespace rubiks_cube
         private void scrambleButton_Click(object sender, EventArgs e)
         {
             string[] validMoves = { "F", "R", "U", "B", "L", "D", "F'", "R'", "U'", "B'", "L'", "D'" };
-            int scrambleLength = random.Next()%99 + 1; // Number of moves in the scramble
+            int scrambleLength = random.Next()%20 + 1; // Number of moves in the scramble
 
             for (int i = 0; i < scrambleLength; i++)
             {
@@ -379,24 +375,26 @@ namespace rubiks_cube
 
             for (int i = 0; i < 3; i++)
             {
-                dataGridView1.Rows[2].Cells[i].Style.BackColor = dataGridView4.Rows[i].Cells[2].Style.BackColor; // Correct indexing
+                dataGridView1.Rows[2].Cells[i].Style.BackColor = dataGridView4.Rows[i].Cells[2].Style.BackColor;
+                dataGridView1.Rows[2].Cells[i].Style.SelectionBackColor = dataGridView4.Rows[i].Cells[2].Style.BackColor;
             }
 
             for (int i = 0; i < 3; i++)
             {
-                dataGridView4.Rows[i].Cells[2].Style.BackColor = dataGridView3.Rows[0].Cells[i].Style.BackColor; // Correct indexing
+                dataGridView4.Rows[i].Cells[2].Style.BackColor = dataGridView3.Rows[0].Cells[i].Style.BackColor;
+                dataGridView4.Rows[i].Cells[2].Style.SelectionBackColor = dataGridView3.Rows[0].Cells[i].Style.BackColor;
             }
 
             for (int i = 0; i < 3; i++)
             {
-                dataGridView3.Rows[0].Cells[i].Style.BackColor = dataGridView2.Rows[i].Cells[0].Style.BackColor; // Correct indexing
-                if(i==0) dataGridView3.DefaultCellStyle.SelectionBackColor = dataGridView2.Rows[i].Cells[0].Style.BackColor;
+                dataGridView3.Rows[0].Cells[i].Style.BackColor = dataGridView2.Rows[i].Cells[0].Style.BackColor;
+                dataGridView3.Rows[0].Cells[i].Style.SelectionBackColor = dataGridView2.Rows[i].Cells[0].Style.BackColor;
             }
 
             for (int i = 0; i < 3; i++)
             {
-                dataGridView2.Rows[i].Cells[0].Style.BackColor = temp[i]; // Correct indexing
-                if(i == 0) dataGridView2.DefaultCellStyle.SelectionBackColor = temp[i];
+                dataGridView2.Rows[i].Cells[0].Style.BackColor = temp[i];
+                dataGridView2.Rows[i].Cells[0].Style.SelectionBackColor = temp[i];
             }
         }
 
@@ -416,24 +414,26 @@ namespace rubiks_cube
 
             for (int i = 0; i < 3; i++)
             {
-                dataGridView1.Rows[0].Cells[i].Style.BackColor = dataGridView2.Rows[i].Cells[2].Style.BackColor; // Correct indexing
-                if (i == 0) dataGridView1.DefaultCellStyle.SelectionBackColor = dataGridView2.Rows[i].Cells[2].Style.BackColor;
+                dataGridView1.Rows[0].Cells[i].Style.BackColor = dataGridView2.Rows[i].Cells[2].Style.BackColor; 
+                dataGridView1.Rows[0].Cells[i].Style.SelectionBackColor = dataGridView2.Rows[i].Cells[2].Style.BackColor;
             }
 
             for (int i = 0; i < 3; i++)
             {
-                dataGridView2.Rows[i].Cells[2].Style.BackColor = dataGridView3.Rows[2].Cells[i].Style.BackColor; // Correct indexing
+                dataGridView2.Rows[i].Cells[2].Style.BackColor = dataGridView3.Rows[2].Cells[i].Style.BackColor;
+                dataGridView2.Rows[i].Cells[2].Style.SelectionBackColor = dataGridView3.Rows[2].Cells[i].Style.BackColor;
             }
 
             for (int i = 0; i < 3; i++)
             {
-                dataGridView3.Rows[2].Cells[i].Style.BackColor = dataGridView4.Rows[i].Cells[0].Style.BackColor; // Correct indexing
+                dataGridView3.Rows[2].Cells[i].Style.BackColor = dataGridView4.Rows[i].Cells[0].Style.BackColor;
+                dataGridView3.Rows[2].Cells[i].Style.SelectionBackColor = dataGridView4.Rows[i].Cells[0].Style.BackColor;
             }
 
             for (int i = 0; i < 3; i++)
             {
-                dataGridView4.Rows[i].Cells[0].Style.BackColor = temp[i]; // Correct indexing
-                if (i == 0) dataGridView4.DefaultCellStyle.SelectionBackColor = temp[i];
+                dataGridView4.Rows[i].Cells[0].Style.BackColor = temp[i];
+                dataGridView4.Rows[i].Cells[0].Style.SelectionBackColor = temp[i];
             }
         }
 
@@ -453,23 +453,26 @@ namespace rubiks_cube
 
             for (int i = 0; i < 3; i++)
             {
-                dataGridView1.Rows[i].Cells[2].Style.BackColor = dataGridView5.Rows[i].Cells[2].Style.BackColor; // Correct indexing
+                dataGridView1.Rows[i].Cells[2].Style.BackColor = dataGridView5.Rows[i].Cells[2].Style.BackColor; 
+                dataGridView1.Rows[i].Cells[2].Style.SelectionBackColor = dataGridView5.Rows[i].Cells[2].Style.BackColor;
             }
 
             for (int i = 0; i < 3; i++)
             {
-                dataGridView5.Rows[i].Cells[2].Style.BackColor = dataGridView3.Rows[i].Cells[2].Style.BackColor; // Correct indexing
+                dataGridView5.Rows[i].Cells[2].Style.BackColor = dataGridView3.Rows[i].Cells[2].Style.BackColor;
+                dataGridView5.Rows[i].Cells[2].Style.SelectionBackColor = dataGridView3.Rows[i].Cells[2].Style.BackColor;
             }
 
             for (int i = 0; i < 3; i++)
             {
-                dataGridView3.Rows[i].Cells[2].Style.BackColor = dataGridView6.Rows[i].Cells[0].Style.BackColor; // Correct indexing
+                dataGridView3.Rows[i].Cells[2].Style.BackColor = dataGridView6.Rows[i].Cells[0].Style.BackColor;
+                dataGridView3.Rows[i].Cells[2].Style.SelectionBackColor = dataGridView6.Rows[i].Cells[0].Style.BackColor;
             }
 
             for (int i = 0; i < 3; i++)
             {
-                dataGridView6.Rows[i].Cells[0].Style.BackColor = temp[i]; // Correct indexing
-                if (i == 0) dataGridView6.DefaultCellStyle.SelectionBackColor = temp[i];
+                dataGridView6.Rows[i].Cells[0].Style.BackColor = temp[i];
+                dataGridView6.Rows[i].Cells[0].Style.SelectionBackColor = temp[i];
             }
         }
 
@@ -489,25 +492,26 @@ namespace rubiks_cube
 
             for (int i = 0; i < 3; i++)
             {
-                dataGridView1.Rows[i].Cells[0].Style.BackColor = dataGridView6.Rows[i].Cells[2].Style.BackColor; // Correct indexing
-                if (i == 0) dataGridView1.DefaultCellStyle.SelectionBackColor = dataGridView6.Rows[i].Cells[2].Style.BackColor;
+                dataGridView1.Rows[i].Cells[0].Style.BackColor = dataGridView6.Rows[i].Cells[2].Style.BackColor;
+                dataGridView1.Rows[i].Cells[0].Style.SelectionBackColor = dataGridView6.Rows[i].Cells[2].Style.BackColor;
             }
 
             for (int i = 0; i < 3; i++)
             {
-                dataGridView6.Rows[i].Cells[2].Style.BackColor = dataGridView3.Rows[i].Cells[0].Style.BackColor; // Correct indexing
+                dataGridView6.Rows[i].Cells[2].Style.BackColor = dataGridView3.Rows[i].Cells[0].Style.BackColor;
+                dataGridView6.Rows[i].Cells[2].Style.SelectionBackColor = dataGridView3.Rows[i].Cells[0].Style.BackColor;
             }
 
             for (int i = 0; i < 3; i++)
             {
-                dataGridView3.Rows[i].Cells[0].Style.BackColor = dataGridView5.Rows[i].Cells[0].Style.BackColor; // Correct indexing
-                if (i == 0) dataGridView3.DefaultCellStyle.SelectionBackColor = dataGridView5.Rows[i].Cells[0].Style.BackColor;
+                dataGridView3.Rows[i].Cells[0].Style.BackColor = dataGridView5.Rows[i].Cells[0].Style.BackColor;
+                dataGridView3.Rows[i].Cells[0].Style.SelectionBackColor = dataGridView5.Rows[i].Cells[0].Style.BackColor;
             }
 
             for (int i = 0; i < 3; i++)
             {
-                dataGridView5.Rows[i].Cells[0].Style.BackColor = temp[i]; // Correct indexing
-                if (i == 0) dataGridView5.DefaultCellStyle.SelectionBackColor = temp[i];
+                dataGridView5.Rows[i].Cells[0].Style.BackColor = temp[i];
+                dataGridView5.Rows[i].Cells[0].Style.SelectionBackColor = temp[i];
             }
         }
 
@@ -527,26 +531,26 @@ namespace rubiks_cube
 
             for (int i = 0; i < 3; i++)
             {
-                dataGridView5.Rows[0].Cells[i].Style.BackColor = dataGridView2.Rows[0].Cells[i].Style.BackColor; // Correct indexing
-                if (i == 0) dataGridView5.DefaultCellStyle.SelectionBackColor = dataGridView2.Rows[0].Cells[i].Style.BackColor;
+                dataGridView5.Rows[0].Cells[i].Style.BackColor = dataGridView2.Rows[0].Cells[i].Style.BackColor; 
+                dataGridView5.Rows[0].Cells[i].Style.SelectionBackColor = dataGridView2.Rows[0].Cells[i].Style.BackColor;
             }
 
             for (int i = 0; i < 3; i++)
             {
-                dataGridView2.Rows[0].Cells[i].Style.BackColor = dataGridView6.Rows[0].Cells[i].Style.BackColor; // Correct indexing
-                if (i == 0) dataGridView2.DefaultCellStyle.SelectionBackColor = dataGridView6.Rows[0].Cells[i].Style.BackColor;
+                dataGridView2.Rows[0].Cells[i].Style.BackColor = dataGridView6.Rows[0].Cells[i].Style.BackColor;
+                dataGridView2.Rows[0].Cells[i].Style.SelectionBackColor = dataGridView6.Rows[0].Cells[i].Style.BackColor;
             }
 
             for (int i = 0; i < 3; i++)
             {
-                dataGridView6.Rows[0].Cells[i].Style.BackColor = dataGridView4.Rows[0].Cells[i].Style.BackColor; // Correct indexing
-                if (i == 0) dataGridView6.DefaultCellStyle.SelectionBackColor = dataGridView4.Rows[0].Cells[i].Style.BackColor;
+                dataGridView6.Rows[0].Cells[i].Style.BackColor = dataGridView4.Rows[0].Cells[i].Style.BackColor;
+                dataGridView6.Rows[0].Cells[i].Style.SelectionBackColor = dataGridView4.Rows[0].Cells[i].Style.BackColor;
             }
 
             for (int i = 0; i < 3; i++)
             {
-                dataGridView4.Rows[0].Cells[i].Style.BackColor = temp[i]; // Correct indexing
-                if (i == 0) dataGridView4.DefaultCellStyle.SelectionBackColor = temp[i];
+                dataGridView4.Rows[0].Cells[i].Style.BackColor = temp[i];
+                dataGridView4.Rows[0].Cells[i].Style.SelectionBackColor = temp[i];
             }
         }
 
@@ -566,22 +570,26 @@ namespace rubiks_cube
 
             for (int i = 0; i < 3; i++)
             {
-                dataGridView5.Rows[2].Cells[i].Style.BackColor = dataGridView4.Rows[2].Cells[i].Style.BackColor; // Correct indexing
+                dataGridView5.Rows[2].Cells[i].Style.BackColor = dataGridView4.Rows[2].Cells[i].Style.BackColor;
+                dataGridView5.Rows[2].Cells[i].Style.SelectionBackColor = dataGridView4.Rows[2].Cells[i].Style.BackColor;
             }
 
             for (int i = 0; i < 3; i++)
             {
-                dataGridView4.Rows[2].Cells[i].Style.BackColor = dataGridView6.Rows[2].Cells[i].Style.BackColor; // Correct indexing
+                dataGridView4.Rows[2].Cells[i].Style.BackColor = dataGridView6.Rows[2].Cells[i].Style.BackColor;
+                dataGridView4.Rows[2].Cells[i].Style.SelectionBackColor = dataGridView6.Rows[2].Cells[i].Style.BackColor;
             }
 
             for (int i = 0; i < 3; i++)
             {
-                dataGridView6.Rows[2].Cells[i].Style.BackColor = dataGridView2.Rows[2].Cells[i].Style.BackColor; // Correct indexing
+                dataGridView6.Rows[2].Cells[i].Style.BackColor = dataGridView2.Rows[2].Cells[i].Style.BackColor;
+                dataGridView6.Rows[2].Cells[i].Style.SelectionBackColor = dataGridView2.Rows[2].Cells[i].Style.BackColor;
             }
 
             for (int i = 0; i < 3; i++)
             {
-                dataGridView2.Rows[2].Cells[i].Style.BackColor = temp[i]; // Correct indexing
+                dataGridView2.Rows[2].Cells[i].Style.BackColor = temp[i];
+                dataGridView2.Rows[2].Cells[i].Style.SelectionBackColor = temp[i];
             }
         }
 
@@ -602,23 +610,25 @@ namespace rubiks_cube
             for (int i = 0; i < 3; i++)
             {
                 dataGridView1.Rows[2].Cells[i].Style.BackColor = dataGridView2.Rows[i].Cells[0].Style.BackColor;
+                dataGridView1.Rows[2].Cells[i].Style.SelectionBackColor = dataGridView2.Rows[i].Cells[0].Style.BackColor;
             }
 
             for (int i = 0; i < 3; i++)
             {
                 dataGridView2.Rows[i].Cells[0].Style.BackColor = dataGridView3.Rows[0].Cells[i].Style.BackColor;
-                if (i == 0) dataGridView2.DefaultCellStyle.SelectionBackColor = dataGridView3.Rows[0].Cells[i].Style.BackColor;
+                dataGridView2.Rows[i].Cells[0].Style.SelectionBackColor = dataGridView3.Rows[0].Cells[i].Style.BackColor;
             }
 
             for (int i = 0; i < 3; i++)
             {
                 dataGridView3.Rows[0].Cells[i].Style.BackColor = dataGridView4.Rows[i].Cells[2].Style.BackColor;
-                if (i == 0) dataGridView3.DefaultCellStyle.SelectionBackColor = dataGridView4.Rows[i].Cells[2].Style.BackColor;
+                dataGridView3.Rows[0].Cells[i].Style.SelectionBackColor = dataGridView4.Rows[i].Cells[2].Style.BackColor;
             }
 
             for (int i = 0; i < 3; i++)
             {
                 dataGridView4.Rows[i].Cells[2].Style.BackColor = temp[i];
+                dataGridView4.Rows[i].Cells[2].Style.SelectionBackColor = temp[i];
             }
         }
 
@@ -639,23 +649,25 @@ namespace rubiks_cube
             for (int i = 0; i < 3; i++)
             {
                 dataGridView4.Rows[i].Cells[0].Style.BackColor = dataGridView3.Rows[2].Cells[i].Style.BackColor;
-                if (i == 0) dataGridView4.DefaultCellStyle.SelectionBackColor = dataGridView3.Rows[2].Cells[i].Style.BackColor;
+                dataGridView4.Rows[i].Cells[0].Style.SelectionBackColor = dataGridView3.Rows[2].Cells[i].Style.BackColor;
             }
 
             for (int i = 0; i < 3; i++)
             {
                 dataGridView3.Rows[2].Cells[i].Style.BackColor = dataGridView2.Rows[i].Cells[2].Style.BackColor;
+                dataGridView3.Rows[2].Cells[i].Style.SelectionBackColor = dataGridView2.Rows[i].Cells[2].Style.BackColor;
             }
 
             for (int i = 0; i < 3; i++)
             {
                 dataGridView2.Rows[i].Cells[2].Style.BackColor = dataGridView1.Rows[0].Cells[i].Style.BackColor;
+                dataGridView2.Rows[i].Cells[2].Style.SelectionBackColor = dataGridView1.Rows[0].Cells[i].Style.BackColor;
             }
 
             for (int i = 0; i < 3; i++)
             {
                 dataGridView1.Rows[0].Cells[i].Style.BackColor = temp[i];
-                if (i == 0) dataGridView1.DefaultCellStyle.SelectionBackColor = temp[i];
+                dataGridView1.Rows[0].Cells[i].Style.SelectionBackColor = temp[i];
             }
         }
 
@@ -668,7 +680,7 @@ namespace rubiks_cube
         {
             Color[] temp = new Color[3];
 
-            for (int i = 0; i < 3; i++)
+            for (int i = 0; i < 3; i--)
             {
                 temp[i] = dataGridView6.Rows[i].Cells[0].Style.BackColor;
             }
@@ -676,22 +688,25 @@ namespace rubiks_cube
             for (int i = 0; i < 3; i++)
             {
                 dataGridView6.Rows[i].Cells[0].Style.BackColor = dataGridView3.Rows[i].Cells[2].Style.BackColor;
-                if(i == 0) dataGridView6.DefaultCellStyle.SelectionBackColor = dataGridView3.Rows[i].Cells[2].Style.BackColor;
+                dataGridView6.Rows[i].Cells[0].Style.SelectionBackColor = dataGridView3.Rows[i].Cells[2].Style.BackColor;
             }
 
             for (int i = 0; i < 3; i++)
             {
                 dataGridView3.Rows[i].Cells[2].Style.BackColor = dataGridView5.Rows[i].Cells[2].Style.BackColor;
+                dataGridView3.Rows[i].Cells[2].Style.SelectionBackColor = dataGridView5.Rows[i].Cells[2].Style.BackColor;
             }
 
             for (int i = 0; i < 3; i++)
             {
                 dataGridView5.Rows[i].Cells[2].Style.BackColor = dataGridView1.Rows[i].Cells[2].Style.BackColor;
+                dataGridView5.Rows[i].Cells[2].Style.SelectionBackColor = dataGridView1.Rows[i].Cells[2].Style.BackColor;
             }
 
             for (int i = 0; i < 3; i++)
             {
                 dataGridView1.Rows[i].Cells[2].Style.BackColor = temp[i];
+                dataGridView1.Rows[i].Cells[2].Style.SelectionBackColor = temp[i];
             }
         }
 
@@ -712,24 +727,25 @@ namespace rubiks_cube
             for (int i = 0; i < 3; i++)
             {
                 dataGridView5.Rows[i].Cells[0].Style.BackColor = dataGridView3.Rows[i].Cells[0].Style.BackColor;
-                if (i == 0) dataGridView5.DefaultCellStyle.SelectionBackColor = dataGridView3.Rows[i].Cells[0].Style.BackColor;
+                dataGridView5.Rows[i].Cells[0].Style.SelectionBackColor = dataGridView3.Rows[i].Cells[0].Style.BackColor;
             }
 
             for (int i = 0; i < 3; i++)
             {
                 dataGridView3.Rows[i].Cells[0].Style.BackColor = dataGridView6.Rows[i].Cells[2].Style.BackColor;
-                if (i == 0) dataGridView3.DefaultCellStyle.SelectionBackColor = dataGridView6.Rows[i].Cells[2].Style.BackColor;
+                dataGridView3.Rows[i].Cells[0].Style.SelectionBackColor = dataGridView6.Rows[i].Cells[2].Style.BackColor;
             }
 
             for (int i = 0; i < 3; i++)
             {
                 dataGridView6.Rows[i].Cells[2].Style.BackColor = dataGridView1.Rows[i].Cells[0].Style.BackColor;
+                dataGridView6.Rows[i].Cells[2].Style.SelectionBackColor = dataGridView1.Rows[i].Cells[0].Style.BackColor;
             }
 
             for (int i = 0; i < 3; i++)
             {
                 dataGridView1.Rows[i].Cells[0].Style.BackColor = temp[i];
-                if (i == 0) dataGridView1.DefaultCellStyle.SelectionBackColor = temp[i];
+                dataGridView1.Rows[i].Cells[0].Style.SelectionBackColor = temp[i];
             }
         }
 
@@ -750,25 +766,25 @@ namespace rubiks_cube
             for (int i = 0; i < 3; i++)
             {
                 dataGridView5.Rows[0].Cells[i].Style.BackColor = dataGridView4.Rows[0].Cells[i].Style.BackColor;
-                if (i == 0) dataGridView5.DefaultCellStyle.SelectionBackColor = dataGridView4.Rows[0].Cells[i].Style.BackColor;
+                dataGridView5.Rows[0].Cells[i].Style.SelectionBackColor = dataGridView4.Rows[0].Cells[i].Style.BackColor;
             }
 
             for (int i = 0; i < 3; i++)
             {
                 dataGridView4.Rows[0].Cells[i].Style.BackColor = dataGridView6.Rows[0].Cells[i].Style.BackColor;
-                if (i == 0) dataGridView4.DefaultCellStyle.SelectionBackColor = dataGridView6.Rows[0].Cells[i].Style.BackColor;
+                dataGridView4.Rows[0].Cells[i].Style.SelectionBackColor = dataGridView6.Rows[0].Cells[i].Style.BackColor;
             }
 
             for (int i = 0; i < 3; i++)
             {
                 dataGridView6.Rows[0].Cells[i].Style.BackColor = dataGridView2.Rows[0].Cells[i].Style.BackColor;
-                if (i == 0) dataGridView6.DefaultCellStyle.SelectionBackColor = dataGridView2.Rows[0].Cells[i].Style.BackColor;
+                dataGridView6.Rows[0].Cells[i].Style.SelectionBackColor = dataGridView2.Rows[0].Cells[i].Style.BackColor;
             }
 
             for (int i = 0; i < 3; i++)
             {
                 dataGridView2.Rows[0].Cells[i].Style.BackColor = temp[i];
-                if (i == 0) dataGridView2.DefaultCellStyle.SelectionBackColor = temp[i];
+                dataGridView2.Rows[0].Cells[i].Style.SelectionBackColor = temp[i];
             }
         }
 
@@ -787,18 +803,22 @@ namespace rubiks_cube
             for (int i = 0; i < 3; i++)
             {
                 dataGridView5.Rows[2].Cells[i].Style.BackColor = dataGridView2.Rows[2].Cells[i].Style.BackColor;
+                dataGridView5.Rows[2].Cells[i].Style.SelectionBackColor = dataGridView2.Rows[2].Cells[i].Style.BackColor;
             }
             for (int i = 0; i < 3; i++)
             {
                 dataGridView2.Rows[2].Cells[i].Style.BackColor = dataGridView6.Rows[2].Cells[i].Style.BackColor;
+                dataGridView2.Rows[2].Cells[i].Style.SelectionBackColor = dataGridView6.Rows[2].Cells[i].Style.BackColor;
             }
             for (int i = 0; i < 3; i++)
             {
                 dataGridView6.Rows[2].Cells[i].Style.BackColor = dataGridView4.Rows[2].Cells[i].Style.BackColor;
+                dataGridView6.Rows[2].Cells[i].Style.SelectionBackColor = dataGridView4.Rows[2].Cells[i].Style.BackColor;
             }
             for (int i = 0; i < 3; i++)
             {
                 dataGridView4.Rows[2].Cells[i].Style.BackColor = temp[i];
+                dataGridView4.Rows[2].Cells[i].Style.SelectionBackColor = temp[i];
             }
         }
 
